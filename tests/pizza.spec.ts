@@ -144,3 +144,25 @@ test("purchase with login", async ({ page }) => {
   await expect(page.getByText("0.008")).toBeVisible();
 });
 
+test("about page", async ({ page }) => {
+  await basicInit(page);
+  await page.getByRole("link", { name: "About" }).click();
+  await expect(page.getByText("The secret sauce")).toBeVisible();
+});
+
+test("contact page", async ({ page }) => {
+  await basicInit(page);
+  await page.getByRole("link", { name: "History" }).click();
+  await expect(page.getByText("Mama Rucci, my my")).toBeVisible();
+});
+
+test("franchises not logged in", async ({ page }) => {
+  await basicInit(page);
+
+  await page
+    .getByRole("contentinfo")
+    .getByRole("link", { name: "Franchise" })
+    .click();
+  await expect(page.getByText("So you want a piece of the")).toBeVisible();
+});
+
