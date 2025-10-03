@@ -94,30 +94,32 @@ async function basicInit(page: Page) {
   await page.goto("/");
 }
 
-test("accessing admin dashboard", async ({ page }) => {
-  await basicInit(page);
+async function goToAdminDashboard(page: Page) {
   await page.getByRole("link", { name: "Login" }).click();
   await page.getByRole("textbox", { name: "Email address" }).fill("a@jwt.com");
   await page.getByRole("textbox", { name: "Password" }).fill("admin");
   await page.getByRole("button", { name: "Login" }).click();
+  await page.getByRole("link", { name: "Admin" }).click();
+}
+
+test("accessing admin dashboard", async ({ page }) => {
+  await basicInit(page);
+  await goToAdminDashboard(page);
 
   await expect(page.getByRole("link", { name: "常" })).toBeVisible();
 
-  await page.getByRole("link", { name: "Admin" }).click();
   await expect(page.getByText("Mama Ricci's kitchen")).toBeVisible();
 });
 
 test("adding a franchise", async ({ page }) => {
   await basicInit(page);
-  await page.getByRole("link", { name: "Login" }).click();
-  await page.getByRole("textbox", { name: "Email address" }).fill("a@jwt.com");
-  await page.getByRole("textbox", { name: "Password" }).fill("admin");
-  await page.getByRole("button", { name: "Login" }).click();
+  await goToAdminDashboard(page);
 
-  await page.getByRole("link", { name: "Admin" }).click();
   await page.getByRole("button", { name: "Add Franchise" }).click();
 
-  await expect(page.getByText('Create franchise', { exact: true })).toBeVisible();
+  await expect(
+    page.getByText("Create franchise", { exact: true })
+  ).toBeVisible();
   await page.getByRole("textbox", { name: "franchise name" }).fill("test");
   await page
     .getByRole("textbox", { name: "franchisee admin email" })
@@ -128,4 +130,18 @@ test("adding a franchise", async ({ page }) => {
   await page.getByRole("button", { name: "Create" }).click();
 
   // should expect something here but need to mock out the api call further
+});
+
+test("closing a franchise", async ({ page }) => {
+  await basicInit(page);
+  await goToAdminDashboard(page);
+
+  await expect(page.getByText("Mama Ricci's kitchen")).toBeVisible();
+
+  await page
+    .getByRole("row", { name: "topSpot Close" })
+    .getByRole("button")
+    .click();
+  await expect(page.getByText("Sorry to see you go")).toBeVisible();
+  await page.getByRole("button", { name: "Close" }).click();
 });
