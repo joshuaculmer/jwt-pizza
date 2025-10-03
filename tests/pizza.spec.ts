@@ -28,6 +28,7 @@ async function basicInit(page: Page) {
       token: "abcdef",
     };
     expect(route.request().method()).toBe("PUT");
+    // need to put more here for DELETE AND POST for login logout and register api calls
     await route.fulfill({ json: loginRes });
   });
 
@@ -166,3 +167,28 @@ test("franchises not logged in", async ({ page }) => {
   await expect(page.getByText("So you want a piece of the")).toBeVisible();
 });
 
+test("get docs", async ({ page }) => {
+  await basicInit(page);
+  await page.goto("http://localhost:5173/docs");
+  await expect(page.getByText("service: http://localhost")).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "https://pizza-factory.cs329." })
+  ).toBeVisible();
+});
+
+test("register new user", async ({ page }) => {
+  await basicInit(page);
+  await page.getByRole("link", { name: "Register" }).click();
+
+  await page.getByRole("textbox", { name: "Full name" }).click();
+  await page.getByRole("textbox", { name: "Full name" }).fill("test");
+  await page.getByRole("textbox", { name: "Email address" }).click();
+  await page
+    .getByRole("textbox", { name: "Email address" })
+    .fill("test@jwt.com");
+  await page.getByRole("textbox", { name: "Email address" }).press("Tab");
+  await page.getByRole("textbox", { name: "Password" }).fill("test");
+  await page.getByRole("button", { name: "Register" }).click();
+
+  // should expect something here but need to mock out the api call further
+});

@@ -158,5 +158,3 @@ test("filtering franchises", async ({ page }) => {
 
   // should expect something here but need to mock out the api call further
 });
-
-// We are at 66.87% coverage after this file
