@@ -147,14 +147,19 @@ test("closing a franchise", async ({ page }) => {
 });
 
 test("filtering franchises", async ({ page }) => {
-    await basicInit(page);
+  await basicInit(page);
   await goToAdminDashboard(page);
 
   await expect(page.getByText("Mama Ricci's kitchen")).toBeVisible();
 
-  await page.getByRole('textbox', { name: 'Filter franchises' }).click();
-  await page.getByRole('textbox', { name: 'Filter franchises' }).fill('lota');
-  await page.getByRole('button', { name: 'Submit' }).click();
+  await page.getByRole("textbox", { name: "Filter franchises" }).click();
+  await page.getByRole("textbox", { name: "Filter franchises" }).fill("lota");
+  await page.getByRole("button", { name: "Submit" }).click();
 
   // should expect something here but need to mock out the api call further
+});
+
+test("creating a store", async ({ page }) => {
+  await basicInit(page);
+  await goToAdminDashboard(page);
 });
