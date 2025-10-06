@@ -10,7 +10,7 @@ async function basicInit(page: Page) {
       name: "pizza franchisee",
       email: "f@jwt.com",
       password: "franchisee",
-      roles: [{ role: Role.Franchisee }],
+      roles: [{ objectId: "2", role: Role.Franchisee }],
     },
   };
 
@@ -30,6 +30,7 @@ async function basicInit(page: Page) {
     };
     expect(route.request().method()).toBe("PUT");
     await route.fulfill({ json: loginRes });
+    // console.log(loggedInUser);
   });
 
   // Return the currently logged in user
@@ -73,7 +74,7 @@ async function basicInit(page: Page) {
       ],
     };
     expect(route.request().method()).toBe("GET");
-    await route.fulfill({ json: franchiseRes });
+    await route.fulfill({ json: [franchiseRes] });
   });
 
   await page.goto("/");
