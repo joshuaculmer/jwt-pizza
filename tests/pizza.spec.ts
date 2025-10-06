@@ -17,6 +17,14 @@ async function basicInit(page: Page) {
   // Authorize login for the given user
   await page.route("*/**/api/auth", async (route) => {
     const loginReq = route.request().postDataJSON();
+
+    // logout
+    if(loginReq == null && route.request().method() === "DELETE") {
+      loggedInUser = undefined;
+      await route.fulfill({ status: 200, json: { message: "Logged out" } });
+      return;
+    }
+
     const user = validUsers[loginReq.email];
     if (!user || user.password !== loginReq.password) {
       await route.fulfill({ status: 401, json: { error: "Unauthorized" } });
@@ -111,6 +119,17 @@ test("login", async ({ page }) => {
   await expect(page.getByRole("link", { name: "KC" })).toBeVisible();
 });
 
+test("logout", async ({ page }) => {
+  await basicInit(page);
+  await page.getByRole("link", { name: "Login" }).click();
+  await page.getByRole("textbox", { name: "Email address" }).fill("d@jwt.com");
+  await page.getByRole("textbox", { name: "Password" }).fill("a");
+  await page.getByRole("button", { name: "Login" }).click();
+  await page.getByRole("link", { name: "Logout" }).click();
+  await page.getByRole("link", { name: "Login" }).click();
+  await expect(page.getByText("Welcome back")).toBeVisible();
+});
+
 test("purchase with login", async ({ page }) => {
   await basicInit(page);
 
@@ -192,3 +211,4 @@ test("register new user", async ({ page }) => {
 
   // should expect something here but need to mock out the api call further
 });
+
