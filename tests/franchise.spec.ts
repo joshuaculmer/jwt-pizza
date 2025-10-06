@@ -77,6 +77,24 @@ async function basicInit(page: Page) {
     await route.fulfill({ json: [franchiseRes] });
   });
 
+  // Specific franchise's stores (for creating and deleting stores)
+  // does not actually mock the changes in the UI, only mocks api calls,
+  // UI will not visually change
+  await page.route(/\/api\/franchise\/\d+\/store$/, async (route) => {
+    expect(route.request().method()).toBe("POST");
+    const storeRes = { id: 4, franchiseid: 1, name: "test store" };
+    await route.fulfill({ json: [storeRes] });
+  });
+
+  // Specific franchise's stores (deleting stores)
+  // does not actually mock the changes in the UI, only mocks api calls,
+  // UI will not visually change
+  await page.route(/\/api\/franchise\/\d+\/store\/\d+$/, async (route) => {
+    expect(route.request().method()).toBe("DELETE");
+    const storeRes = { message: "store deleted" };
+    await route.fulfill({ json: storeRes });
+  });
+
   await page.goto("/");
 }
 
@@ -95,4 +113,32 @@ test("Franchisee can see their dashboard", async ({ page }) => {
   await basicInit(page);
   await goToFranchiseDashboard(page);
   await expect(page.getByText("LotaPizza")).toBeVisible();
+});
+
+test("Franchisee can create a store", async ({ page }) => {
+  await basicInit(page);
+  await goToFranchiseDashboard(page);
+
+  await expect(page.getByText("LotaPizza")).toBeVisible();
+  await page.getByRole("button", { name: "Create store" }).click();
+  await page.getByRole("textbox", { name: "store name" }).click();
+  await page.getByRole("textbox", { name: "store name" }).fill("test store");
+
+  await expect(page.getByText("LotaPizza")).toBeHidden();
+  await page.getByRole("button", { name: "Create" }).click();
+
+  await expect(page.getByText("LotaPizza")).toBeVisible();
+});
+
+test("Franchisee can close a store", async ({ page }) => {
+  await basicInit(page);
+  await goToFranchiseDashboard(page);
+
+  await expect(page.getByText("LotaPizza")).toBeVisible();
+  await page.getByRole("button", { name: "Close" }).first().click();
+
+  await expect(page.getByText("Sorry to see you go")).toBeVisible();
+  await page.getByRole("button", { name: "Close" }).click();
+
+  await expect(page.getByText("Sorry to see you go")).toBeHidden();
 });
