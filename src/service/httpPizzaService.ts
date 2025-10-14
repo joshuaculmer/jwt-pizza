@@ -10,6 +10,7 @@ import {
   Endpoints,
   OrderResponse,
   JWTPayload,
+  UserList
 } from "./pizzaService";
 
 const pizzaServiceUrl = import.meta.env.VITE_PIZZA_SERVICE_URL;
@@ -101,6 +102,11 @@ class HttpPizzaService implements PizzaService {
     );
     localStorage.setItem("token", token);
     return Promise.resolve(user);
+  }
+
+  async getUsers(page:number = 0, name:string = ""): Promise<UserList> {
+    // need to add edge cases without number of pages or names
+    return this.callEndpoint(`/api/user?page=${page}&limit=10&name=${name}`) // need to refer to api call for user list
   }
 
   async getMenu(): Promise<Menu> {
