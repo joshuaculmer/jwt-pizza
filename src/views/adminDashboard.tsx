@@ -35,8 +35,19 @@ export default function AdminDashboard(props: Props) {
 
   React.useEffect(() => {
     (async () => {
+      console.log("Loading in franchise list and userlist");
       setFranchiseList(await pizzaService.getFranchises(franchisePage, 3, "*"));
-      setUserList(await pizzaService.getUsers(0, ""));
+      console.log("username:" + props.user?.name);
+      console.log("email:" + props.user?.email);
+
+      const users = await pizzaService.getUsers(
+        props.user?.name || "",
+        props.user?.email || "",
+        0,
+        ""
+      );
+      console.log("Users from pizzaservice:" + users.more);
+      setUserList(users);
     })();
   }, [props.user, franchisePage]);
 

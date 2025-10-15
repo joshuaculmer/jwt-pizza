@@ -91,6 +91,11 @@ async function basicInit(page: Page) {
     await route.fulfill({ json: orderRes });
   });
 
+  // Get UserList // working here
+  // await page.route("/api/user?page=1&limit=10&name=*", async () => {
+
+  // })
+
   await page.goto("/");
 }
 
