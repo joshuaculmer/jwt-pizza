@@ -63,7 +63,11 @@ export default function AdminDashboard(props: Props) {
       state: { franchise: franchise, store: store },
     });
   }
-  async function deleteUser(user: User) {}
+
+  async function deleteUser(user: User) {
+    await pizzaService.deleteUser(user);
+    filterUsers();
+  }
 
   async function filterFranchises() {
     setFranchiseList(

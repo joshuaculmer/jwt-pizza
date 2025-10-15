@@ -105,14 +105,20 @@ class HttpPizzaService implements PizzaService {
   }
 
   async getUsers(
-    page: number = 0,
-    limit:number = 10,
+    page: number = 1,
+    limit: number = 10,
     nameFilter: string = "*"
   ): Promise<UserList> {
     return this.callEndpoint(
       `/api/user?page=${page}&limit=${limit}&name=${nameFilter}`,
       "GET"
     );
+  }
+
+  // TODO make sure that there is access to user.id
+  async deleteUser(user: User): Promise<any> {
+    const userId = user.id;
+    return this.callEndpoint(`/api/user/${userId}`, "DELETE");
   }
 
   async getMenu(): Promise<Menu> {
