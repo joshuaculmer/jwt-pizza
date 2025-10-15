@@ -41,15 +41,12 @@ export default function AdminDashboard(props: Props) {
       console.log("username:" + props.user?.name);
       console.log("email:" + props.user?.email);
 
-      const users = await pizzaService.getUsers(
-        0,
-        10,
-        "*"
-      );
+      const users = await pizzaService.getUsers(userPage, 10, "*");
+      console.log("user page is currently:" + userPage);
       console.log("Users from pizzaservice:" + users.more);
       setUserList(users);
     })();
-  }, [props.user, franchisePage]);
+  }, [props.user, franchisePage, userPage]);
 
   function createFranchise() {
     navigate("/admin-dashboard/create-franchise");
