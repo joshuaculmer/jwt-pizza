@@ -159,7 +159,7 @@ test("filtering franchises", async ({ page }) => {
 
   await page.getByRole("textbox", { name: "Filter franchises" }).click();
   await page.getByRole("textbox", { name: "Filter franchises" }).fill("lota");
-  await page.getByRole("button", { name: "Submit" }).click();
+  await page.getByRole("button", { name: "Filter Franchise" }).click();
 
   // should expect something here but need to mock out the api call further
 });
