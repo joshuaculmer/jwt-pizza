@@ -105,14 +105,12 @@ class HttpPizzaService implements PizzaService {
   }
 
   async getUsers(
-    name: string,
-    email: string,
     page: number = 0,
-    searchname: string = ""
+    limit:number = 10,
+    nameFilter: string = "*"
   ): Promise<UserList> {
-    // need to add edge cases without number of pages or names
     return this.callEndpoint(
-      `/api/user?page=${page}&limit=10&name=${searchname}`,
+      `/api/user?page=${page}&limit=${limit}&name=${nameFilter}`,
       "GET"
     );
   }

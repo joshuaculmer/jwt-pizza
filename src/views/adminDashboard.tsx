@@ -42,9 +42,8 @@ export default function AdminDashboard(props: Props) {
       console.log("email:" + props.user?.email);
 
       const users = await pizzaService.getUsers(
-        props.user?.name || "",
-        props.user?.email || "",
         0,
+        10,
         "*"
       );
       console.log("Users from pizzaservice:" + users.more);
@@ -82,10 +81,9 @@ export default function AdminDashboard(props: Props) {
   async function filterUsers() {
     setUserList(
       await pizzaService.getUsers(
-        props.user?.name || "",
-        props.user?.email || "",
         userPage,
-        `*${filterUserRef.current?.value}`
+        10,
+        `*${filterUserRef.current?.value}*`
       )
     );
   }

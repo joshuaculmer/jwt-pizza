@@ -114,6 +114,8 @@ test("accessing admin dashboard", async ({ page }) => {
   await expect(page.getByRole("link", { name: "常" })).toBeVisible();
 
   await expect(page.getByText("Mama Ricci's kitchen")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Franchises" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Users" })).toBeVisible();
 });
 
 test("adding a franchise", async ({ page }) => {
