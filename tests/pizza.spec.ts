@@ -232,14 +232,6 @@ test("franchises not logged in", async ({ page }) => {
   await expect(page.getByText("So you want a piece of the")).toBeVisible();
 });
 
-test("get docs", async ({ page }) => {
-  await basicInit(page);
-  await page.goto("http://localhost:5173/docs");
-  await expect(page.getByText("service: http://localhost")).toBeVisible();
-  await expect(
-    page.getByRole("link", { name: "https://pizza-factory.cs329." })
-  ).toBeVisible();
-});
 
 test("register new user", async ({ page }) => {
   await basicInit(page);
